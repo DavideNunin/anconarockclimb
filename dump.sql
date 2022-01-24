@@ -39,8 +39,9 @@ CREATE TABLE `Abbonamento` (
   `EntrateRimanenti` int(11) DEFAULT NULL,
   PRIMARY KEY (`Transazione`,`Tipo`),
   KEY `CodSegretario` (`CodSegretario`),
-  CONSTRAINT `Abbonamento_ibfk_1` FOREIGN KEY (`CodSegretario`) REFERENCES `Segretario` (`CodSegretario`),
-  CONSTRAINT `Abbonamento_ibfk_2` FOREIGN KEY (`Transazione`) REFERENCES `TransazioneAbb` (`ID`)
+  CONSTRAINT `Abbonamento_ibfk_1` FOREIGN KEY (`CodSegretario`) REFERENCES `Segretario` (`CodSegretario`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `Abbonamento_ibfk_2` FOREIGN KEY (`Transazione`) REFERENCES `TransazioneAbb` (`ID`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  CONSTRAINT `CONSTRAINT_1` CHECK (`Ingressi` > 0 and `EntrateRimanenti` >= 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -65,8 +66,8 @@ CREATE TABLE `Accesso` (
   `Codsessione` int(11) NOT NULL,
   PRIMARY KEY (`CF`,`Codsessione`),
   KEY `Codsessione` (`Codsessione`),
-  CONSTRAINT `Accesso_ibfk_1` FOREIGN KEY (`CF`) REFERENCES `Iscritto` (`CF`),
-  CONSTRAINT `Accesso_ibfk_2` FOREIGN KEY (`Codsessione`) REFERENCES `Sessione` (`CodSessione`)
+  CONSTRAINT `Accesso_ibfk_1` FOREIGN KEY (`CF`) REFERENCES `Iscritto` (`CF`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `Accesso_ibfk_2` FOREIGN KEY (`Codsessione`) REFERENCES `Sessione` (`CodSessione`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -91,8 +92,8 @@ CREATE TABLE `Afferenza` (
   `Corso` varchar(20) NOT NULL,
   PRIMARY KEY (`CodSessione`,`Corso`),
   KEY `Corso` (`Corso`),
-  CONSTRAINT `Afferenza_ibfk_1` FOREIGN KEY (`CodSessione`) REFERENCES `Sessione` (`CodSessione`),
-  CONSTRAINT `Afferenza_ibfk_2` FOREIGN KEY (`Corso`) REFERENCES `Corso` (`Nome`)
+  CONSTRAINT `Afferenza_ibfk_1` FOREIGN KEY (`CodSessione`) REFERENCES `Sessione` (`CodSessione`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `Afferenza_ibfk_2` FOREIGN KEY (`Corso`) REFERENCES `Corso` (`Nome`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -117,11 +118,10 @@ CREATE TABLE `Assicurazione` (
   `CodSegretario` varchar(16) DEFAULT NULL,
   `Massimale` decimal(15,2) DEFAULT NULL,
   `Condizione` text DEFAULT NULL,
-  `Giorno` int(11) DEFAULT NULL,
-  `Mese` int(11) DEFAULT NULL,
-  `Anno` year(4) DEFAULT NULL,
+  `DataAssicurazione` date DEFAULT NULL,
   PRIMARY KEY (`Transazione`),
-  CONSTRAINT `Assicurazione_ibfk_1` FOREIGN KEY (`Transazione`) REFERENCES `TransazioneAss` (`ID`)
+  CONSTRAINT `Assicurazione_ibfk_1` FOREIGN KEY (`Transazione`) REFERENCES `TransazioneAss` (`ID`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  CONSTRAINT `CONSTRAINT_1` CHECK (`Massimale` > 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -150,7 +150,8 @@ CREATE TABLE `Bilancio` (
   `Immobilizzazioni` decimal(15,2) DEFAULT NULL,
   PRIMARY KEY (`Anno`),
   KEY `CodSegretario` (`CodSegretario`),
-  CONSTRAINT `Bilancio_ibfk_1` FOREIGN KEY (`CodSegretario`) REFERENCES `Segretario` (`CodSegretario`)
+  CONSTRAINT `Bilancio_ibfk_1` FOREIGN KEY (`CodSegretario`) REFERENCES `Segretario` (`CodSegretario`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  CONSTRAINT `CONSTRAINT_1` CHECK (`CapitaleSociale` > 0 and `Immobilizzazioni` > 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -181,9 +182,10 @@ CREATE TABLE `BustaPaga` (
   KEY `Dipendente` (`Dipendente`),
   KEY `CodSegretario` (`CodSegretario`),
   KEY `Transazione` (`Transazione`),
-  CONSTRAINT `BustaPaga_ibfk_1` FOREIGN KEY (`Dipendente`) REFERENCES `Dipendente` (`CF`),
-  CONSTRAINT `BustaPaga_ibfk_2` FOREIGN KEY (`CodSegretario`) REFERENCES `Segretario` (`CodSegretario`),
-  CONSTRAINT `BustaPaga_ibfk_3` FOREIGN KEY (`Transazione`) REFERENCES `TransazioneBP` (`ID`)
+  CONSTRAINT `BustaPaga_ibfk_1` FOREIGN KEY (`Dipendente`) REFERENCES `Dipendente` (`CF`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  CONSTRAINT `BustaPaga_ibfk_2` FOREIGN KEY (`CodSegretario`) REFERENCES `Segretario` (`CodSegretario`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  CONSTRAINT `BustaPaga_ibfk_3` FOREIGN KEY (`Transazione`) REFERENCES `TransazioneBP` (`ID`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  CONSTRAINT `CONSTRAINT_1` CHECK (`Mensilita` = 'Gennaio' or `Mensilita` = 'Febbraio' or `Mensilita` = 'Marzo' or `Mensilita` = 'Aprile' or `Mensilita` = 'Maggio' or `Mensilita` = 'Giugno' or `Mensilita` = 'Luglio' or `Mensilita` = 'Agosto' or `Mensilita` = 'Settembre' or `Mensilita` = 'Ottobre' or `Mensilita` = 'Novembre' or `Mensilita` = 'Dicembre' or `Mensilita` = 'Tredicesima')
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -209,7 +211,7 @@ CREATE TABLE `Corso` (
   `Luogo` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`Nome`),
   KEY `CodIstruttore` (`CodIstruttore`),
-  CONSTRAINT `Corso_ibfk_1` FOREIGN KEY (`CodIstruttore`) REFERENCES `Istruttore` (`CodIstruttore`)
+  CONSTRAINT `Corso_ibfk_1` FOREIGN KEY (`CodIstruttore`) REFERENCES `Istruttore` (`CodIstruttore`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -260,8 +262,9 @@ CREATE TABLE `EsecuzioneAcq` (
   `Quantita` int(11) DEFAULT NULL,
   PRIMARY KEY (`Prodotto`,`Transazione`),
   KEY `Transazione` (`Transazione`),
-  CONSTRAINT `EsecuzioneAcq_ibfk_1` FOREIGN KEY (`Prodotto`) REFERENCES `Prodotto` (`Nome`),
-  CONSTRAINT `EsecuzioneAcq_ibfk_2` FOREIGN KEY (`Transazione`) REFERENCES `TransazioneAcq` (`ID`)
+  CONSTRAINT `EsecuzioneAcq_ibfk_1` FOREIGN KEY (`Prodotto`) REFERENCES `Prodotto` (`Nome`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  CONSTRAINT `EsecuzioneAcq_ibfk_2` FOREIGN KEY (`Transazione`) REFERENCES `TransazioneAcq` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `CONSTRAINT_1` CHECK (`Quantita` > 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -313,7 +316,7 @@ CREATE TABLE `Istruttore` (
   `CodIstruttore` varchar(16) NOT NULL,
   `Certificazione` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`CodIstruttore`),
-  CONSTRAINT `Istruttore_ibfk_1` FOREIGN KEY (`CodIstruttore`) REFERENCES `Dipendente` (`CF`)
+  CONSTRAINT `Istruttore_ibfk_1` FOREIGN KEY (`CodIstruttore`) REFERENCES `Dipendente` (`CF`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -335,12 +338,13 @@ DROP TABLE IF EXISTS `OrarioDip`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `OrarioDip` (
   `CodOrario` int(11) NOT NULL,
-  `Giorno` int(11) DEFAULT NULL,
-  `Mese` int(11) DEFAULT NULL,
-  `Anno` year(4) DEFAULT NULL,
   `OraInizio` time DEFAULT NULL,
   `OraFine` time DEFAULT NULL,
-  PRIMARY KEY (`CodOrario`)
+  `DataOrarioDip` date DEFAULT NULL,
+  PRIMARY KEY (`CodOrario`),
+  CONSTRAINT `CONSTRAINT_1` CHECK (`OraInizio` > '00:00:00' and `OraInizio` < '23:59:59'),
+  CONSTRAINT `CONSTRAINT_2` CHECK (`OraFine` > '00:00:00' and `OraFine` < '23:59:59'),
+  CONSTRAINT `CONSTRAINT_3` CHECK (`OraInizio` < `OraFine`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -361,17 +365,13 @@ DROP TABLE IF EXISTS `Prenotazione`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Prenotazione` (
-  `CF` varchar(16) NOT NULL,
-  `Giorno` int(11) NOT NULL,
-  `Mese` int(11) NOT NULL,
-  `Anno` year(4) NOT NULL,
   `Iscritto` varchar(16) NOT NULL,
   `Sessione` int(11) DEFAULT NULL,
-  PRIMARY KEY (`CF`,`Giorno`,`Mese`,`Anno`,`Iscritto`),
-  KEY `Iscritto` (`Iscritto`),
+  `DataPrenotazione` datetime NOT NULL,
+  PRIMARY KEY (`Iscritto`,`DataPrenotazione`),
   KEY `Sessione` (`Sessione`),
-  CONSTRAINT `Prenotazione_ibfk_1` FOREIGN KEY (`Iscritto`) REFERENCES `Iscritto` (`CF`),
-  CONSTRAINT `Prenotazione_ibfk_2` FOREIGN KEY (`Sessione`) REFERENCES `Sessione` (`CodSessione`)
+  CONSTRAINT `Prenotazione_ibfk_1` FOREIGN KEY (`Iscritto`) REFERENCES `Iscritto` (`CF`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `Prenotazione_ibfk_2` FOREIGN KEY (`Sessione`) REFERENCES `Sessione` (`CodSessione`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -397,7 +397,7 @@ CREATE TABLE `Prodotto` (
   `Tipologia` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`Nome`),
   KEY `CodSegretario` (`CodSegretario`),
-  CONSTRAINT `Prodotto_ibfk_1` FOREIGN KEY (`CodSegretario`) REFERENCES `Segretario` (`CodSegretario`)
+  CONSTRAINT `Prodotto_ibfk_1` FOREIGN KEY (`CodSegretario`) REFERENCES `Segretario` (`CodSegretario`) ON DELETE NO ACTION ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -421,7 +421,7 @@ CREATE TABLE `Segretario` (
   `CodSegretario` varchar(16) NOT NULL,
   `Email` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`CodSegretario`),
-  CONSTRAINT `Segretario_ibfk_1` FOREIGN KEY (`CodSegretario`) REFERENCES `Dipendente` (`CF`)
+  CONSTRAINT `Segretario_ibfk_1` FOREIGN KEY (`CodSegretario`) REFERENCES `Dipendente` (`CF`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -443,14 +443,17 @@ DROP TABLE IF EXISTS `Sessione`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Sessione` (
   `CodSessione` int(11) NOT NULL,
-  `Giorno` int(11) DEFAULT NULL,
-  `Mese` int(11) DEFAULT NULL,
-  `Anno` year(4) DEFAULT NULL,
   `OraInizio` time DEFAULT NULL,
   `OraFine` time DEFAULT NULL,
   `Capienza` int(11) NOT NULL,
   `PostiRim` int(11) NOT NULL,
-  PRIMARY KEY (`CodSessione`)
+  `DataSessione` date DEFAULT NULL,
+  PRIMARY KEY (`CodSessione`),
+  CONSTRAINT `CONSTRAINT_1` CHECK (`OraInizio` > '00:00:00' and `OraInizio` < '23:59:59'),
+  CONSTRAINT `CONSTRAINT_2` CHECK (`OraFine` > '00:00:00' and `OraFine` < '23:59:59'),
+  CONSTRAINT `CONSTRAINT_3` CHECK (`OraInizio` < `OraFine`),
+  CONSTRAINT `CONSTRAINT_4` CHECK (`Capienza` > 0 and `Capienza` <= 30),
+  CONSTRAINT `CONSTRAINT_5` CHECK (`PostiRim` >= 0 and `PostiRim` <= `Capienza`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -475,8 +478,8 @@ CREATE TABLE `Svolgimento` (
   `CodOrario` int(11) NOT NULL,
   PRIMARY KEY (`Dipendente`,`CodOrario`),
   KEY `CodOrario` (`CodOrario`),
-  CONSTRAINT `Svolgimento_ibfk_1` FOREIGN KEY (`Dipendente`) REFERENCES `Dipendente` (`CF`),
-  CONSTRAINT `Svolgimento_ibfk_2` FOREIGN KEY (`CodOrario`) REFERENCES `OrarioDip` (`CodOrario`)
+  CONSTRAINT `Svolgimento_ibfk_1` FOREIGN KEY (`Dipendente`) REFERENCES `Dipendente` (`CF`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `Svolgimento_ibfk_2` FOREIGN KEY (`CodOrario`) REFERENCES `OrarioDip` (`CodOrario`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -501,7 +504,7 @@ CREATE TABLE `Telefono` (
   `CF` varchar(16) DEFAULT NULL,
   PRIMARY KEY (`Numero`),
   KEY `CF` (`CF`),
-  CONSTRAINT `Telefono_ibfk_1` FOREIGN KEY (`CF`) REFERENCES `Dipendente` (`CF`)
+  CONSTRAINT `Telefono_ibfk_1` FOREIGN KEY (`CF`) REFERENCES `Dipendente` (`CF`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -524,10 +527,9 @@ DROP TABLE IF EXISTS `Transazione`;
 CREATE TABLE `Transazione` (
   `ID` int(11) NOT NULL,
   `Importo` decimal(15,2) DEFAULT NULL,
-  `Giorno` int(11) DEFAULT NULL,
-  `Mese` int(11) DEFAULT NULL,
-  `Anno` year(4) DEFAULT NULL,
-  PRIMARY KEY (`ID`)
+  `DataTransazione` datetime DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  CONSTRAINT `CONSTRAINT_1` CHECK (`Importo` > 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -550,7 +552,7 @@ DROP TABLE IF EXISTS `TransazioneAbb`;
 CREATE TABLE `TransazioneAbb` (
   `ID` int(11) NOT NULL,
   PRIMARY KEY (`ID`),
-  CONSTRAINT `TransazioneAbb_ibfk_1` FOREIGN KEY (`ID`) REFERENCES `Transazione` (`ID`)
+  CONSTRAINT `TransazioneAbb_ibfk_1` FOREIGN KEY (`ID`) REFERENCES `Transazione` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -573,7 +575,7 @@ DROP TABLE IF EXISTS `TransazioneAcq`;
 CREATE TABLE `TransazioneAcq` (
   `ID` int(11) NOT NULL,
   PRIMARY KEY (`ID`),
-  CONSTRAINT `TransazioneAcq_ibfk_1` FOREIGN KEY (`ID`) REFERENCES `Transazione` (`ID`)
+  CONSTRAINT `TransazioneAcq_ibfk_1` FOREIGN KEY (`ID`) REFERENCES `Transazione` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -596,7 +598,7 @@ DROP TABLE IF EXISTS `TransazioneAss`;
 CREATE TABLE `TransazioneAss` (
   `ID` int(11) NOT NULL,
   PRIMARY KEY (`ID`),
-  CONSTRAINT `TransazioneAss_ibfk_1` FOREIGN KEY (`ID`) REFERENCES `Transazione` (`ID`)
+  CONSTRAINT `TransazioneAss_ibfk_1` FOREIGN KEY (`ID`) REFERENCES `Transazione` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -619,7 +621,7 @@ DROP TABLE IF EXISTS `TransazioneBP`;
 CREATE TABLE `TransazioneBP` (
   `ID` int(11) NOT NULL,
   PRIMARY KEY (`ID`),
-  CONSTRAINT `TransazioneBP_ibfk_1` FOREIGN KEY (`ID`) REFERENCES `Transazione` (`ID`)
+  CONSTRAINT `TransazioneBP_ibfk_1` FOREIGN KEY (`ID`) REFERENCES `Transazione` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -641,4 +643,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-23 18:01:53
+-- Dump completed on 2022-01-24 18:21:49

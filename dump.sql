@@ -286,13 +286,14 @@ DROP TABLE IF EXISTS `Iscritto`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Iscritto` (
   `CF` varchar(16) NOT NULL,
-  `Email` varchar(20) DEFAULT NULL,
+  `Email` varchar(30) DEFAULT NULL,
   `Password` varchar(20) DEFAULT NULL,
   `Username` varchar(20) DEFAULT NULL,
   `DataNascita` date DEFAULT NULL,
   `Cognome` varchar(20) DEFAULT NULL,
   `Nome` varchar(20) DEFAULT NULL,
-  PRIMARY KEY (`CF`)
+  PRIMARY KEY (`CF`),
+  CONSTRAINT `CONSTRAINT_1` CHECK (`Email` like '%@%.%')
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -419,9 +420,10 @@ DROP TABLE IF EXISTS `Segretario`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Segretario` (
   `CodSegretario` varchar(16) NOT NULL,
-  `Email` varchar(20) DEFAULT NULL,
+  `Email` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`CodSegretario`),
-  CONSTRAINT `Segretario_ibfk_1` FOREIGN KEY (`CodSegretario`) REFERENCES `Dipendente` (`CF`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `Segretario_ibfk_1` FOREIGN KEY (`CodSegretario`) REFERENCES `Dipendente` (`CF`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `CONSTRAINT_1` CHECK (`Email` like '%@%.%')
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -643,4 +645,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-24 18:21:49
+-- Dump completed on 2022-01-25 16:05:51

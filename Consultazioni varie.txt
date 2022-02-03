@@ -1,0 +1,51 @@
+
+QUERY CONSULTAZIONI
+Consultazione dati prodotto
+	Restituire dati di un determinato prodotto
+	Restituisce il prodotto più venduto
+	Restituire tutti i prodotti di una categoria
+Consultazione dati abbonamento
+	Restituire tutte le tipologie di abbonamento
+	Restituire gli abbonamenti prossimi alla scadenza
+	Visualizzare tutte le informazioni di un particolare abbonamento
+	Visualizzare la tipolgia di abbonamento più venduta
+Consultazione assicurazione
+	Il tipo di copertura di una determinata assicurazione
+	Quella più venduta
+Consultazione busta paga
+	Visualizzare i prodotti acquistati da un determinato iscritto
+	Somma delle buste paga in un anno
+Consultazione prenotazioni
+	Visualizzare tutte le prenotazioni fatte in un intervallo di tempo
+	Visualizzare il numero di prenotazioni fatte per le sessioni della prossima settimana 
+Consultazione accessi
+	Visualizzare gli accessi di una determinata sessione
+	Visualizzare gli accessi avvenuti in un intervallo temporale
+Consultazione dati corso
+	Visualizzare gli istruttori abilitati ad un determinato corso
+	Visualizzare le sessioni che presentano un determinato corso in un determinato intervallo o istante 	di tempo
+Consultazione dati iscritto
+	Visualizzare gli iscritti maggiorenni
+	Visualizzare i dati di uno specifico iscritto
+Consultazione dati dipendente
+	Visualizzare i turni lavorativi in un determinato periodo
+	Visualizzare i numeri di telefono di un determinato dipendente
+Consultazione dati istruttore
+	Visualizzare gli istruttori con una determinata specializzazione
+Consultazione dati segretario
+	Visualizza le transazioni registrate da un determinato segretario
+Consultazione bilancio
+	Visualizzare il bilancio di un determinato anno
+	Visualizzare immediata – differita di un determinato anno
+Consultazione transazione
+	Visualizza transazioni fatte in un determinato periodo
+	Visualizza una determinata transazione
+Consultazione transazione abbonamento
+	Visualizzare gli abbonamenti fatti da un determinato iscritto
+Consultazione transazione assicurazione 
+	Visualizzare le assicurazioni fatti da un determinato iscritto
+Consultazione transazione acquisto
+	Visualizzare i prodotti acquistati da un determinato iscritto
+Visualizzazione media delle prenotazioni a settimana per un determinato iscritto
+Visualizzazione guadagno medio settimanale grazie ai prodotti venduti
+Visualizzazione guadagno medio settimanale grazie agli abbonamenti venduti

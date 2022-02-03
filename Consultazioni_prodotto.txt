@@ -1,0 +1,36 @@
+Consultazione dati prodotto:
+-Restituire dati di un determinato prodotto
+----------------------------------------------------------------------
+select * from Prodotto where Prodotto.Nome="<nome prodotto>";
+----------------------------------------------------------------------
+-Restituisce il prodotto più venduto
+----------------------------------------------------------------------
+select * 
+from Prodotto as b
+where 
+(select sum(Quantita)
+    from EsecuzioneAcq group by Prodotto having Prodotto=b.Nome)=( select max(somme) from ( select sum(Quantita) as somme  from EsecuzioneAcq group by Prodotto ) as somme); 
+----------------------------------------------------------------------
+-Restituire tutti i prodotti di una categoria
+----------------------------------------------------------------------
+select * from Prodotto where Tipologia="Magnesite";
+----------------------------------------------------------------------
+Consultazione Dati Abbonamento:
+-Restituire tutte le tipologie di abbonamento
+----------------------------------------------------------------------
+select distinct Durata,Tipo from Abbonamento;
+----------------------------------------------------------------------
+-Restituire tutti gli abbonamenti prossimi alla scadenza
+----------------------------------------------------------------------
+select * from Abbonamento where EntrateRimanenti <=floor(Ingressi/10);
+----------------------------------------------------------------------
+Visualizzare tutte le informazioni di un particolare abbonamento
+----------------------------------------------------------------------
+Nota: un abbonamento specifico è identificato univocamente dalla sua 
+corrispondente Transazione Abbonamento e dal suo tipo(di corso), quindi 
+per questa queri bisogna fornire almeno queste due informazioni
+
+select Abbonamento.*, Iscritto.Nome
+from Abbonamento, Iscritto, TransazioneAbb
+where TransazioneAbb.Iscritto=Iscritto.Cf and TransazioneAbb.ID=60278 and Abbonamento.Transazione=TransazioneAbb.ID and Abbonamento.Tipo="Arrampicata Alpina";
+----------------------------------------------------------------------

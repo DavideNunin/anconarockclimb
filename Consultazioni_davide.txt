@@ -13,18 +13,18 @@ where
 ----------------------------------------------------------------------
 -Restituire tutti i prodotti di una categoria
 ----------------------------------------------------------------------
-select * from Prodotto where Tipologia="Magnesite";
+select * from Prodotto where Tipologia="<nome categoria>";
 ----------------------------------------------------------------------
 Consultazione Dati Abbonamento:
--Restituire tutte le tipologie di abbonamento
+    -Restituire tutte le tipologie di abbonamento
 ----------------------------------------------------------------------
 select distinct Durata,Tipo from Abbonamento;
 ----------------------------------------------------------------------
--Restituire tutti gli abbonamenti prossimi alla scadenza
+    -Restituire tutti gli abbonamenti prossimi alla scadenza
 ----------------------------------------------------------------------
 select * from Abbonamento where EntrateRimanenti <=floor(Ingressi/10);
 ----------------------------------------------------------------------
-Visualizzare tutte le informazioni di un particolare abbonamento
+    -Visualizzare tutte le informazioni di un particolare abbonamento
 ----------------------------------------------------------------------
 Nota: un abbonamento specifico è identificato univocamente dalla sua 
 corrispondente Transazione Abbonamento e dal suo tipo(di corso), quindi 
@@ -32,5 +32,44 @@ per questa queri bisogna fornire almeno queste due informazioni
 
 select Abbonamento.*, Iscritto.Nome
 from Abbonamento, Iscritto, TransazioneAbb
-where TransazioneAbb.Iscritto=Iscritto.Cf and TransazioneAbb.ID=60278 and Abbonamento.Transazione=TransazioneAbb.ID and Abbonamento.Tipo="Arrampicata Alpina";
+where TransazioneAbb.Iscritto=Iscritto.Cf and TransazioneAbb.ID=<codice transazione> and Abbonamento.Transazione=TransazioneAbb.ID and Abbonamento.Tipo="<nome categoria>";
 ----------------------------------------------------------------------
+    -Visualizzare la tipolgia di abbonamento più venduta
+----------------------------------------------------------------------
+select Tipo,Durata from Abbonamento as abb
+group by Tipo,Durata
+having
+(select count(*) as somma 
+    from Abbonamento 
+    group by Tipo,Durata
+    having Tipo=abb.Tipo and Durata=abb.Durata
+)=(
+select max(conta.somma) 
+from (select count(*) as somma from Abbonamento group by Tipo,Durata) as conta);
+----------------------------------------------------------------------
+Consultazione dati Assicurazione
+    -Il tipo di copertura di una determinata assicurazione
+----------------------------------------------------------------------
+select Massimale,Condizione,DataAssicurazione from Assicurazione where Transazione=<codice transazione>;
+----------------------------------------------------------------------
+    -Il tipo di assicurazione più venduto (si intende per tipo l' abbinamento della voce massimale e condizioni)
+----------------------------------------------------------------------
+select Massimale,Condizione from Assicurazione as ass
+group by Massimale,Condizione
+having
+(select count(*) as somma 
+    from Assicurazione
+    group by Massimale,Condizione
+    having Massimale=ass.Massimale and Condizione=ass.Condizione
+)=(
+select max(conta.somma)
+from (select count(*) as somma From Assicurazione group by Massimale, Condizione) as conta
+)
+----------------------------------------------------------------------
+Consultazione busta paga
+    -Visualizzare i prodotti acquistati da un determinato iscritto
+----------------------------------------------------------------------
+----------------------------------------------------------------------
+    -somma delle buste paga emesse in un anno
+----------------------------------------------------------------------
+

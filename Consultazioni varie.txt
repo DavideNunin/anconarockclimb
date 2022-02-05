@@ -13,7 +13,6 @@ Consultazione assicurazione
 	Il tipo di copertura di una determinata assicurazione
 	Quella più venduta
 Consultazione busta paga
-	Visualizzare i prodotti acquistati da un determinato iscritto
 	Somma delle buste paga in un anno
 Consultazione prenotazioni
 	Visualizzare tutte le prenotazioni fatte in un intervallo di tempo

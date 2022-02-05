@@ -72,4 +72,22 @@ Consultazione busta paga
 ----------------------------------------------------------------------
     -somma delle buste paga emesse in un anno
 ----------------------------------------------------------------------
+select sum(Transazione.Importo) from Transazione,(select distinct Transazione from BustaPaga) as BP where Transazione.Id=BP.Transazione;
+----------------------------------------------------------------------
+Consultazione prenotazioni
+    -Visualizzare tutte le prenotazioni fatte in un intervallo di tempo
+----------------------------------------------------------------------
+select * from Prenotazione 
+where DataPrenotazione > <inizio periodo di tempo> and DataPrenotazione< <inizio periodo di tempo>
+----------------------------------------------------------------------
+Visualizzare il numero di prenotazioni fatte per le sessioni della prossima settimana
+----------------------------------------------------------------------
+select count(*) from Prenotazioni where DataPrenotazione> <data di inizio della settimana>
+and DataPrenotazione< <data di inizio della settimana>+7giorni
+----------------------------------------------------------------------
+Consultazione accessi
+    -Visualizzare gli accessi di una determinata sessione
+----------------------------------------------------------------------
+select * from Accesso where CodSessione=11095;
+----------------------------------------------------------------------
 

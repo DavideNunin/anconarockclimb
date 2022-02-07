@@ -67,8 +67,6 @@ Consultazione dati Assicurazione
     )
 ----------------------------------------------------------------------
 Consultazione busta paga
-    -Visualizzare i prodotti acquistati da un determinato iscritto
-----------------------------------------------------------------------
 ----------------------------------------------------------------------
     -somma delle buste paga emesse in un anno
 ----------------------------------------------------------------------
